@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A simple calculator made by Sontu</title>
+  <style>
+    #display {
+      width: 93%;
+      height: 50px;
+      font-size: 17px;
+      text-align: right;
+      padding-right: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid white;
+      padding: 10px;
+    }
+
+    /* th,
+    td {
+      padding: 10px;
+    } */
+
+    .equals {
+      background-color: #abebc6;
+      color: #000000;
+    }
+
+    .sym {
+      background-color: #FFA500;
+      color: white;
+    }
+
+    .clrall {
+      background-color: #FF0000;
+      color: white;
+    }
+
+    .mod {
+      background-color: #f4d03f;
+      color: black;
+    }
+
+    .calculator-container {
+      background-color: #3498db;
+      /* white background */
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      /* soft shadow */
+      width: fit-content;
+      margin: 50px auto;
+      /* center on the page */
+    }
+
+    body {
+      font-family: "Times New Roman", Times, serif;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="calculator-container">
+    <table>
+      <tr>
+        <td colspan="4"><input type="text" id="display" placeholder="The result will appear here 😎" readonly><br></td>
+      </tr>
+      <tr>
+        <td><button onclick="func('(')" style="width: 100%;">(</button></td>
+        <td><button onclick="func(')')" style="width: 100%;">)</button></td>
+        <td><button onclick="func('%')" style="width: 100%;" class="mod">M</button></td>
+        <td><button onclick="backspace()" style="width: 100%;" class="clrall">←</button></td>
+
+
+      </tr>
+      <tr>
+        <td><button onclick="func('7')" style="width: 100%;">7</button></td>
+        <td><button onclick="func('8')" style="width: 100%;">8</button></td>
+        <td><button onclick="func('9')" style="width: 100%;">9</button></td>
+        <td><button onclick="func('/')" style="width: 100%;" class="sym">÷</button></td>
+
+      </tr>
+      <tr>
+        <td><button onclick="func('4')" style="width: 100%;">4</button></td>
+        <td><button onclick="func('5')" style="width: 100%;">5</button></td>
+        <td><button onclick="func('6')" style="width: 100%;">6</button></td>
+        <td><button onclick="func('*')" style="width: 100%;" class="sym">×</button></td>
+      </tr>
+      <tr>
+        <td><button onclick="func('3')" style="width: 100%;">3</button></td>
+        <td><button onclick="func('2')" style="width: 100%;">2</button></td>
+        <td><button onclick="func('1')" style="width: 100%;">1</button></td>
+        <td><button onclick="func('-')" style="width: 100%;" class="sym">-</button></td>
+      </tr>
+      <tr>
+        <td><button onclick="func('0')" style="width: 100%;">0</button></td>
+        <td><button onclick="func('.')" style="width: 100%;">.</button></td>
+        <td><button onclick="percentage()" style="width: 100%;">%</button></td>
+        <td><button onclick="func('+')" style="width: 100%;" class="sym">+</button></td>
+      </tr>
+      <tr>
+        <td colspan="2"><button onclick="clearDisplay()" style="width: 100%;" class="clrall">Clear All</button></td>
+        <td colspan="2"><button onclick="calculate()" style="width: 100%;" class="equals">▶</button></td>
+      </tr>
+    </table>
+  </div>
+  <script>
+    const display = document.getElementById("display");
+
+    function func(value) {
+      display.value += value;
+    }
+
+    function clearDisplay() {
+      display.value = "";
+    }
+
+    function calculate() {
+      try {
+        display.value = eval(display.value);
+      } catch (error) {
+        display.value = "Error";
+      }
+    }
+    // This line evaluates the mathematical expression typed by the user.
+    // eval() is a JavaScript function that executes a string as code.
+    // The try statement defines a code block to run (to try).
+    // The catch statement defines a code block to handle any error.
+
+
+
+    function backspace() {
+      let currentOutput = display.value;
+      if (currentOutput.length > 0) {
+        display.value = currentOutput.slice(0, -1);
+      }
+    }
+    // let currentOutput = display.value;
+    // Stores the current content of the calculator screen in a variable called currentOutput.
+    // if (currentOutput.length > 0) {
+    // Checks if the display is not empty (to avoid deleting when there's nothing there).
+    // display.value = currentOutput.slice(0, -1);
+    // slice(0, -1) means:
+    // Start from the beginning (0)
+    // Cut off 1 character from the end
+    // It updates the display with the shortened version (last character removed).
+
+    function percentage() {
+      const value = display.value;
+      const match = value.match(/(\d+(\.\d+)?)$/);
+      if (match) {
+        const num = match[0];
+        const percentValue = parseFloat(num) / 100;
+        display.value = value.slice(0, -num.length) + percentValue;
+      }
+    }
+    // This function is used in your calculator to convert the last number entered into a percentage (i.e., divide it by 100).
+// const value = display.value;
+// Gets the current value shown on the calculator display (e.g., "500+25").
+
+// const match = value.match(/(\d+(\.\d+)?)$/);
+// This regular expression (regex) finds the last number in the string, including decimals.
+// It looks for:
+// \d+ → One or more digits
+// (\.\d+)? → Optional decimal part
+// $ → End of the string
+// For "500+25" → it matches "25"
+
+// if (match) {
+// Only runs the rest if a number was found at the end.
+
+// const num = match[0];
+// Stores the matched number (e.g., "25").
+
+// const percentValue = parseFloat(num) / 100;
+// Converts "25" into a real number using parseFloat, then divides it by 100 → 0.25
+
+// display.value = value.slice(0, -num.length) + percentValue;
+// Removes the original number from the end of the string.
+// slice(0, -num.length) cuts off the matched number
+// Adds the percentage value instead.
+
+  </script>
+
+</body>
+
+</html>
